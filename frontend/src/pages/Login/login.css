@@ -1,0 +1,250 @@
+
+   */ */ */
+:root {
+  --primary-color: #ff8c00; /* accent color, adjust as needed */
+  --text-color: #333;
+  --border-color: #ddd;
+  --bg-light: #f9f9f9;
+  --error-color: #e63946;
+  --success-color: #2a9d8f;
+}
+
+.formcontainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: var(--bg-light);
+}
+.login_page {
+  display: flex;
+  
+}
+
+/* Left column: Login form */
+.login_left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+
+/* Right column: About */
+.login_right {
+  flex: 1;
+  background-color: #fff;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-left: 1px solid #ddd;
+}
+
+.login_form_container {
+  width: 100%;
+  max-width: 400px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.password_input {
+  position: relative;
+}
+
+.password_input button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.submit_btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff8c00;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.signup-link {
+  color: #ff8c00;
+  text-decoration: none;
+}
+
+.error {
+  color: red;
+  margin-bottom: 10px;
+}
+
+.forgot_password a {
+  color: #ff8c00;
+  text-decoration: none;
+}
+
+
+.innerContainer {
+  background: #fff;
+  padding: 2.5rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  animation: fadeIn 0.6s ease;
+}
+
+.heading {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  color: var(--text-color);
+}
+
+.signuptext {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.signuptext a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.error {
+  color: var(--error-color);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+.success {
+  color: var(--success-color);
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+label {
+  text-align: left;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+input:focus {
+  border-color: var(--primary-color);
+}
+
+.passwordinput {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordinput input {
+  flex: 1;
+  padding-right: 2.5rem;
+}
+
+.passwordinput button {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.passwordinput button:hover {
+  color: var(--primary-color);
+}
+
+.forgotpasswordtext {
+  text-align: right;
+  font-size: 0.9rem;
+}
+
+.forgotpasswordtext a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.forgotpasswordtext a:hover {
+  text-decoration: underline;
+}
+
+.submitbtn {
+  background-color:  #ff8c00;
+  color: white;
+  border: none;
+  padding: 0.9rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.submitbtn:hover {
+  background: blue;
+  transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 📱 Responsive */
+@media (max-width: 480px) {
+  .innerContainer {
+    padding: 2rem;
+    width: 90%;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .submitbtn {
+    padding: 0.8rem;
+  }
+}

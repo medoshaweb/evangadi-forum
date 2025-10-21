@@ -1,0 +1,157 @@
+:root {
+  --primary-color: #516cf0;
+  --background-color: #f9f9fc;
+  --text-color: #333;
+}
+
+/* Page layout */
+.page-wrapper {
+  display: flex;
+  flex-direction: row;      /* side by side */
+  align-items: center;      /* vertical alignment */
+  justify-content: center;  /* center horizontally */
+   gap: 50px;                /* space between the two sections */
+  padding: 20px;
+}
+
+.signup-container {
+  flex: 0 0 500px;  /* fixed width, won’t shrink */
+  max-width: 50%;   /* optional proportional width */
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.about-container {
+  flex: 1;          /* takes remaining space */
+  max-width: 50%;
+  background-color: #f9f9f9;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+
+/* Left form */
+/* .form-side {
+  flex: 1;
+  padding: 50px 60px;
+} */
+
+
+.form-side h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+
+.signin-text {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+form input {
+  width: 95%;
+  padding: 12px 14px;
+  
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: #fff;
+}
+
+.nameinputs {
+  display: flex;
+  gap: 10px;
+}
+
+.passwordinput {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.submitbtn {
+  background-color: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.submitbtn:hover {
+  background-color: #3e56c5;
+}
+
+.terms {
+  font-size: 13px;
+  color: #555;
+  margin-top: 15px;
+}
+
+/* Right side (About section) */
+.about-section {
+  flex: 1;
+  background: #f7f8ff;
+  padding: 60px;
+}
+
+.about-section h4 {
+  color: #f48c06;
+  margin-bottom: 8px;
+}
+
+.about-section h2 {
+  color: #2b2b2b;
+  margin-bottom: 20px;
+}
+
+.about-section p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.howitworks-btn {
+  background-color: #f48c06;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.howitworks-btn:hover {
+  background-color: #d97706;
+}
+
+/* Responsive */
+@media (max-width: 850px) {
+  .signup-container {
+    flex-direction: column;
+  }
+
+  .about-section {
+    padding: 30px;
+    text-align: center;
+  }
+}

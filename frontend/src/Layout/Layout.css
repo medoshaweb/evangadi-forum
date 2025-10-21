@@ -1,0 +1,32 @@
+/* Layout.css */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ✅ Sticky Header */
+header.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Scrollable Middle Content */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* ✅ Footer stays at the bottom (not sticky) */
+footer.evangadi-footer {
+  background-color: #f8f8f8;
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
+  border-top: 1px solid #e0e0e0;
+}
