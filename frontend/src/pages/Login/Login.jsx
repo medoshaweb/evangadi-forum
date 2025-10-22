@@ -64,16 +64,20 @@ export default function Login() {
                 Create a new account
               </Link>
             </p>
+            <br />
             {error && <p className="error">{error}</p>}
             <form onSubmit={handleSubmit}>
-              <input
-                name="email"
-                type="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder="Email address"
-                required
-              />
+              <div className="email_input">
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  placeholder="Email address"
+                  className="form-input"
+                  required
+                />
+              </div>
               <div className="password_input">
                 <input
                   name="password"
@@ -81,6 +85,7 @@ export default function Login() {
                   value={form.password}
                   onChange={handleChange}
                   placeholder="Password"
+                  className="form-input"
                   required
                 />
                 <button type="button" onClick={handleTogglePassword}>

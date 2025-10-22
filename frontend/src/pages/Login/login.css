@@ -46,6 +46,16 @@
   width: 100%;
   max-width: 400px;
 }
+.form-input {
+  width: 100%;
+  padding: 10px;
+  padding-right: 40px; /* space for eye icon */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: block;
+}
+
 
 input {
   width: 100%;
@@ -55,15 +65,21 @@ input {
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
-
 .password_input {
   position: relative;
+  width: 100%;
 }
+.password_input input {
+  width: 100%;
+  padding-right: 40px; /* space for eye icon */
+  box-sizing: border-box;
+}
+
 
 .password_input button {
   position: absolute;
   right: 10px;
-  top: 50%;
+  top: 42%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
