@@ -10,6 +10,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home/Home";
 import Footer from "./components/Footer/Footer";
 import logo from "./assets/images/evangadi-logo-header.png";
+import bgImage from "./assets/images/evangadi-background.jpg";
 import { useAuth } from "./context/AuthContext";
 import "./App.css";
 
@@ -27,7 +28,15 @@ export default function App() {
 if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="app">
+    <div
+      className="app"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <header className="header">
         <div className="brand">
           <Link to="/">

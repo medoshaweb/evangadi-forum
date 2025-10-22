@@ -10,18 +10,62 @@ const genAI = new GoogleGenerativeAI({
 // 📘 Get all questions
 export const getQuestions = async (req, res) => {
   try {
-    const [results] = await db.query(`
-      SELECT q.id, q.title, q.description, q.created_at, u.username
-      FROM questions q
-      JOIN users u ON q.user_id = u.id
-      ORDER BY q.created_at DESC
-    `);
-    res.json(results);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "DB error" });
+    const { page = 1, limit = 5, search = "" } = req.query;
+    const offset = (page - 1) * limit;
+    // Count total for pagination
+    const countQuery = `
+SELECT COUNT(*) AS total
+FROM questions q
+JOIN users u ON q.user_id = u.id
+WHERE q.title LIKE ? OR q.description LIKE ? OR u.username LIKE ?
+`;
+    const [countResult] = await db.query(countQuery, [
+      `%${search}%`,
+      `%${search}%`,
+      `%${search}%`,
+    ]);
+    const total = countResult[0].total;
+
+    // Fetch paginated questions
+    const query = `
+SELECT q.*, u.username
+FROM questions q
+JOIN users u ON q.user_id = u.id
+WHERE q.title LIKE ? OR q.description LIKE ? OR u.username LIKE ?
+ORDER BY q.created_at DESC
+LIMIT ? OFFSET ?
+`;
+    const [rows] = await db.query(query, [
+      `%${search}%`,
+      `%${search}%`,
+      `%${search}%`,
+      Number(limit),
+      Number(offset),
+    ]);
+
+    res.json({
+      questions: rows,
+      total,
+      page: Number(page),
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
+//     const [results] = await db.query(`
+//       SELECT q.id, q.title, q.description, q.created_at, u.username
+//       FROM questions q
+//       JOIN users u ON q.user_id = u.id
+//       ORDER BY q.created_at DESC
+//     `);
+//     res.json(results);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "DB error" });
+//   }
+// };
 
 // 📘 Get single question with its answers
 export const getQuestionWithAnswers = async (req, res) => {
