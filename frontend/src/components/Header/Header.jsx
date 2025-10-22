@@ -20,7 +20,7 @@ export default function Header() {
 
         {user ? (
           <>
-            <span className="welcome">{`Welcome: ${user.firstName}`}</span>
+            <span className="welcome">Welcome: {user?.user?.firstName || user?.user?.username || "Guest"}</span>
             <button className="btn small" onClick={logout}>
               Logout
             </button>

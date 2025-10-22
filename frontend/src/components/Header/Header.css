@@ -18,6 +18,12 @@
   text-decoration: none;
 
 }
+.welcome{
+  color: var(--blue-shade) !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  margin-right: 10px;
+}
 
 .navigation_links:hover{
   color:var(--primary-color) !important;

@@ -49,7 +49,7 @@ if (loading) return <div>Loading...</div>;
           {user ? (
             <>
               <span className="welcome">{`Welcome: ${
-                user.firstName || user.username
+                user.user?.firstName || user.user?.username || "Guest"
               }`}</span>
               <button className="btn small" onClick={logout}>
                 Logout
