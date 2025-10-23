@@ -81,6 +81,7 @@ footer {
 /* Welcome text */
 .welcome {
   font-size: 0.95rem;
+  font-weight: 700;
   color: #0a66c2;
   background: rgba(255, 255, 255, 0.15);
   padding: 5px 12px;
