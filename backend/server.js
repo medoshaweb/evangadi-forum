@@ -1,8 +1,10 @@
 import "dotenv/config"; // automatically loads .env
+// import { config } from "dotenv";
 import express from "express";
 import cors from "cors";
 const router = express.Router();
 import authRoutes from "./routes/auth.js";
+
 
 
 // Correct ESM import for answersRouter
@@ -10,6 +12,7 @@ import answersRoutes from "./routes/answerRoutes.js";
 import questionRoutes from "./routes/questionRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
