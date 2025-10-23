@@ -1,25 +1,27 @@
-// backend/ai/ai.js
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from "dotenv";
-dotenv.config();
 
-const genAI = new GoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY, // your API key
-});
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'models/gemini-1.5-pro-002' });
 
 export async function generateAnswer(prompt) {
-  try {
-    const result = await genAI.generateText({
-      model: "gemini-1.5", // simpler stable model
-      prompt: prompt,
-      temperature: 0.7,
-      maxOutputTokens: 500,
-    });
+  const response = await model.generateText({
+    prompt: prompt,
+    temperature: 0.7,
+  });
 
-    console.log("AI result:", result); // log full response for debugging
-    return result?.candidates?.[0]?.content || "No response from AI.";
-  } catch (err) {
-    console.error("AI error:", err);
-    return "Something went wrong while fetching AI response.";
-  }
+  return response.text; 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
