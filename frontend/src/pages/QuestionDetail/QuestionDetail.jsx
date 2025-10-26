@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../../api";
 import "./questionDetail.css";
-import { useAuth } from "../../context/AuthContext";
+
 
 export default function QuestionDetail() {
   const { id } = useParams();
   const [payload, setPayload] = useState(null);
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
-  const { user } = useAuth();
+ 
 
   useEffect(() => {
     const fetchQuestion = async () => {
