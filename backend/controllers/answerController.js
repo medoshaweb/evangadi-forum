@@ -40,6 +40,9 @@ export const createAnswer = async (req, res) => {
   }
 };
 
+
+
+
 // 🆕 Get answers by questionId
 export const getAnswersByQuestionId = async (req, res) => {
   try {
@@ -55,5 +58,47 @@ export const getAnswersByQuestionId = async (req, res) => {
   } catch (error) {
     console.error("Error fetching answers:", error);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+// Vote on an answer
+export const voteAnswer = async (req, res) => {
+  try {
+    // ✅ Get user from token
+    const userId = req.user?.id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    // ✅ Get answerId and vote from request
+    const { answerId, vote } = req.body;
+
+    console.log("voteAnswer body:", req.body);
+    console.log("User from token:", req.user);
+
+    if (!answerId || ![1, -1].includes(vote)) {
+      return res.status(400).json({ message: "Invalid vote data" });
+    }
+
+    // ✅ Insert or update vote
+    await db.query(
+      `INSERT INTO answer_votes (user_id, answer_id, vote)
+       VALUES (?, ?, ?)
+       ON DUPLICATE KEY UPDATE vote = ?`,
+      [userId, answerId, vote, vote]
+    );
+
+    // ✅ Calculate total votes
+    const [result] = await db.query(
+      `SELECT COALESCE(SUM(vote), 0) AS totalVotes
+       FROM answer_votes
+       WHERE answer_id = ?`,
+      [answerId]
+    );
+
+    console.log("Updated totalVotes:", result[0].totalVotes);
+
+    res.json({ totalVotes: result[0].totalVotes });
+  } catch (err) {
+    console.error("voteAnswer error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };

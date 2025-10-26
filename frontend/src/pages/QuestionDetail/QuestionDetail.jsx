@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../../api";
+import "./questionDetail.css";
+import { useAuth } from "../../context/AuthContext";
 
 export default function QuestionDetail() {
   const { id } = useParams();
   const [payload, setPayload] = useState(null);
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
-
-  const fetchQuestion = async () => {
-    try {
-      const res = await API.get(`/questions/${id}`);
-      setPayload(res.data);
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
-    }
-  };
+  const { user } = useAuth();
 
   useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const res = await API.get(`/questions/${id}`);
+        setPayload(res.data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      }
+    };
+
     fetchQuestion();
   }, [id]);
 
@@ -39,6 +42,39 @@ export default function QuestionDetail() {
     }
   };
 
+  // 🗳️ Handle Answer Voting
+  const handleAnswerVote = async (answerId, vote) => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const token = storedUser?.token;
+      if (!token) {
+        alert("Please log in to vote.");
+        return;
+      }
+
+      console.log("Voting on answer:", answerId, "Vote:", vote);
+
+      const res = await API.post(
+        "/answers/vote",
+        { answerId, vote }, // only these 2
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      console.log("Vote response:", res.data);
+
+      // Update vote count locally
+      setPayload((prev) => ({
+        ...prev,
+        answers: prev.answers.map((a) =>
+          a.id === answerId ? { ...a, totalVotes: res.data.totalVotes } : a
+        ),
+      }));
+    } catch (err) {
+      console.error("Error voting answer:", err);
+    }
+  };
+
+
   if (!payload) return <p>Loading...</p>;
 
   return (
@@ -59,15 +95,19 @@ export default function QuestionDetail() {
               <li key={a.id} className="answer">
                 <div className="meta">{a.username} said:</div>
                 <p>{a.answer || a.body || a.answerText}</p>
+
+                {/* 🗳️ Voting Section for Each Answer */}
+                <div className="answer-votes">
+                  <button onClick={() => handleAnswerVote(a.id, 1)}>👍</button>
+                  <span>{a.totalVotes || 0}</span>
+                  <button onClick={() => handleAnswerVote(a.id, -1)}>👎</button>
+                </div>
               </li>
             ))}
           </ul>
         )}
 
-        <form
-          onSubmit={postAnswer}
-          className="answer-form"
-        >
+        <form onSubmit={postAnswer} className="answer-form">
           <label>Your answer</label>
           <textarea
             value={answer}

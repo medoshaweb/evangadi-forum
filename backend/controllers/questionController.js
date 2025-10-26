@@ -20,6 +20,35 @@ function formatDateTime(mysqlDate) {
   });
 }
 
+// Add upvote/downvote to a question
+export const voteQuestion = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { questionId, vote } = req.body; // vote: 1 or -1
+
+    if (![1, -1].includes(vote))
+      return res.status(400).json({ message: "Invalid vote" });
+
+    await db.query(
+      `INSERT INTO question_votes (user_id, question_id, vote)
+       VALUES (?, ?, ?)
+       ON DUPLICATE KEY UPDATE vote = ?`,
+      [userId, questionId, vote, vote]
+    );
+
+    // Calculate total votes
+    const [result] = await db.query(
+      `SELECT SUM(vote) as totalVotes FROM question_votes WHERE question_id = ?`,
+      [questionId]
+    );
+
+    res.json({ totalVotes: result[0].totalVotes || 0 });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 // 📘 Get all questions
 export const getQuestions = async (req, res) => {
   try {
@@ -41,12 +70,15 @@ WHERE q.title LIKE ? OR q.description LIKE ? OR u.username LIKE ?
 
     // Fetch paginated questions
     const query = `
-SELECT q.*, u.username
-FROM questions q
-JOIN users u ON q.user_id = u.id
-WHERE q.title LIKE ? OR q.description LIKE ? OR u.username LIKE ?
-ORDER BY q.created_at DESC
-LIMIT ? OFFSET ?
+      SELECT q.*, u.username,
+             COALESCE(SUM(v.vote), 0) AS totalVotes
+      FROM questions q
+      JOIN users u ON q.user_id = u.id
+      LEFT JOIN question_votes v ON q.id = v.question_id
+      WHERE q.title LIKE ? OR q.description LIKE ? OR u.username LIKE ?
+      GROUP BY q.id
+      ORDER BY q.created_at DESC
+      LIMIT ? OFFSET ?
 `;
     const [rows] = await db.query(query, [
       `%${search}%`,
@@ -74,42 +106,96 @@ LIMIT ? OFFSET ?
   }
 };
 
-// 📘 Get single question with its answers
+// // 📘 Get single question with its answers
+// export const getQuestionWithAnswers = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const [qres] = await db.query(
+//       `SELECT q.id, q.title, q.description, q.created_at, u.username
+//        FROM questions q
+//        JOIN users u ON q.user_id = u.id
+//        WHERE q.id = ?`,
+//       [id]
+//     );
+
+//     if (!qres.length)
+//       return res.status(404).json({ message: "Question not found" });
+
+//     const question = qres[0];
+//     question.created_at = formatDateTime(question.created_at);
+
+//     const [answers] = await db.query(
+//       `SELECT a.id, a.answer, a.created_at, u.username
+//        FROM answers a
+//        JOIN users u ON a.user_id = u.id
+//        WHERE a.question_id = ?
+//        ORDER BY a.created_at ASC`,
+//       [id]
+//     );
+
+//     const formattedAnswers = answers.map((a) => ({
+//       ...a,
+//       created_at: formatDateTime(a.created_at),
+//     }));
+
+//     res.json({ question, answers: formattedAnswers });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "DB error" });
+//   }
+// };
+
+// 📘 Get single question with its answers (with totalVotes)
 export const getQuestionWithAnswers = async (req, res) => {
   const { id } = req.params;
+
   try {
-    const [qres] = await db.query(
-      `SELECT q.id, q.title, q.description, q.created_at, u.username
-       FROM questions q
-       JOIN users u ON q.user_id = u.id
-       WHERE q.id = ?`,
+    // 🧠 1️⃣ Get question details + totalVotes + username
+    const [questionRows] = await db.query(
+      `
+      SELECT q.*, u.username,
+        COALESCE(SUM(v.vote), 0) AS totalVotes
+      FROM questions q
+      JOIN users u ON q.user_id = u.id
+      LEFT JOIN question_votes v ON q.id = v.question_id
+      WHERE q.id = ?
+      GROUP BY q.id
+      `,
       [id]
     );
 
-    if (!qres.length)
+    if (!questionRows.length) {
       return res.status(404).json({ message: "Question not found" });
+    }
 
-    const question = qres[0];
-    question.created_at = formatDateTime(question.created_at);
+    const question = questionRows[0];
 
+    // 🧠 2️⃣ Get all answers for this question + totalVotes + username
     const [answers] = await db.query(
-      `SELECT a.id, a.answer, a.created_at, u.username
-       FROM answers a
-       JOIN users u ON a.user_id = u.id
-       WHERE a.question_id = ?
-       ORDER BY a.created_at ASC`,
+      `
+      SELECT a.*, u.username,
+        COALESCE(SUM(v.vote), 0) AS totalVotes
+      FROM answers a
+      JOIN users u ON a.user_id = u.id
+      LEFT JOIN answer_votes v ON a.id = v.answer_id
+      WHERE a.question_id = ?
+      GROUP BY a.id
+      ORDER BY totalVotes DESC, a.created_at DESC
+      `,
       [id]
     );
 
-    const formattedAnswers = answers.map((a) => ({
-      ...a,
-      created_at: formatDateTime(a.created_at),
-    }));
-
-    res.json({ question, answers: formattedAnswers });
+    // 🧠 3️⃣ Send back question + answers
+    res.status(200).json({
+      question,
+      answers,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "DB error" });
+    console.error("❌ Error fetching question and answers:", err);
+    res.status(500).json({
+      message: "Error fetching question and answers",
+      error: err.message,
+    });
   }
 };
 

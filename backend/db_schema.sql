@@ -35,3 +35,25 @@ CREATE TABLE question_embeddings (
   embedding JSON NOT NULL,
   FOREIGN KEY (question_id) REFERENCES questions(id)
 );
+
+CREATE TABLE question_votes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  question_id INT NOT NULL,
+  user_id INT NOT NULL,
+  vote TINYINT NOT NULL, -- 1 for upvote, -1 for downvote
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_vote (question_id, user_id),
+  FOREIGN KEY (question_id) REFERENCES questions(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE answer_votes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  answer_id INT NOT NULL,
+  user_id INT NOT NULL,
+  vote TINYINT NOT NULL, -- 1 for upvote, -1 for downvote
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_vote (answer_id, user_id),
+  FOREIGN KEY (answer_id) REFERENCES answers(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);

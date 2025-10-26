@@ -4,10 +4,14 @@ import {
   getQuestionWithAnswers,
   createQuestion,
   searchQuestions,
+  voteQuestion,
 } from "../controllers/questionController.js";
+
 import { verifyToken } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
+
 
 // 📍 POST /api/questions/search
 router.post("/search", async (req, res) => {
@@ -36,5 +40,6 @@ router.get("/", getQuestions); // Supports ?page=&limit=&search=
 router.get("/search", verifyToken, searchQuestions);
 router.get("/:id", verifyToken, getQuestionWithAnswers);
 router.post("/", verifyToken, createQuestion);
+router.post("/vote", verifyToken, voteQuestion);
 
 export default router; // ✅ this makes the import work

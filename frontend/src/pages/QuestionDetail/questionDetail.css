@@ -1,0 +1,18 @@
+.answer-votes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.answer-votes button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.answer-votes span {
+  font-weight: bold;
+  font-size: 16px;
+}

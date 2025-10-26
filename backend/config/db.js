@@ -3,10 +3,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const db = await mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASS || "root",
-  database: process.env.DB_NAME || "evan_for",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
 });
 
 console.log("✅ MySQL connected");

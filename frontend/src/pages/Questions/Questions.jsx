@@ -35,6 +35,34 @@ export default function Questions() {
     }
   };
 
+  const handleVote = async (questionId, voteValue) => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+      const token = storedUser?.token;
+      if (!token) return alert("You must be logged in to vote.");
+
+      const res = await API.post(
+        "/questions/vote",
+        { questionId, vote: voteValue },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // ✅ Update local vote count instantly
+      setQuestionsData((prev) => ({
+        ...prev,
+        questions: prev.questions.map((q) =>
+          q.id === questionId ? { ...q, totalVotes: res.data.totalVotes } : q
+        ),
+      }));
+    } catch (error) {
+      console.error("Error voting:", error);
+      alert("Error submitting your vote.");
+    }
+  };
+
+
   useEffect(() => {
     fetchQuestions();
   }, []);
@@ -115,6 +143,23 @@ export default function Questions() {
                     <h3 className="question-title">
                       <Link to={`/questions/${q.id}`}>{q.title}</Link>
                     </h3>
+
+                    {/* 🧮 Voting Section */}
+                    <div className="vote-section">
+                      <button
+                        className="vote-btn upvote"
+                        onClick={() => handleVote(q.id, 1)}
+                      >
+                        👍
+                      </button>
+                      <span className="vote-count">{q.totalVotes || 0}</span>
+                      <button
+                        className="vote-btn downvote"
+                        onClick={() => handleVote(q.id, -1)}
+                      >
+                        👎
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div className="question-arrow">
