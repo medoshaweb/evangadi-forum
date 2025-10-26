@@ -16,9 +16,9 @@ export const createAnswer = async (req, res) => {
     "userId:",
     userId
   );
-   if (!userId) {
-     return res.status(401).json({ message: "Unauthorized: no user info" });
-   }
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized: no user info" });
+  }
 
   if (!answerText) {
     return res.status(400).json({ message: "Answer text is required" });
@@ -30,12 +30,10 @@ export const createAnswer = async (req, res) => {
       [questionId, userId, answerText]
     );
 
-    res
-      .status(201)
-      .json({
-        message: "Answer created successfully",
-        answerId: result.insertId,
-      });
+    res.status(201).json({
+      message: "Answer created successfully",
+      answerId: result.insertId,
+    });
   } catch (error) {
     console.error("Error creating answer:", error);
     res.status(500).json({ message: "Internal server error" });

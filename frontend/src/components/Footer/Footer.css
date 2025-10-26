@@ -22,12 +22,7 @@
 }
 /* Styles for each column */
 .footer-column {
-flex: 1 1 30%;
-/* This shorthand property controls the flexibility of a flex item.
-   It sets three properties in order: flex-grow, flex-shrink, and flex-basis.
-   flex-grow: 1;   Allows the item to grow and take up available extra space (relative to other items' grow values). 
-   flex-shrink: 1;  Allows the item to shrink when necessary to fit within the container. 
-   flex-basis: 30%; Sets the item's initial or preferred size before any growing or shrinking occurs. */
+  flex: 1 1 30%;
 }
 
 /* Column Headings */
@@ -87,5 +82,4 @@ flex: 1 1 30%;
   .footer-logo {
     width: 110px;
   }
-
 }

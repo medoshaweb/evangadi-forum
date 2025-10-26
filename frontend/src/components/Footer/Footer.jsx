@@ -1,4 +1,4 @@
-import  "./Footer.css";
+import "./Footer.css";
 import { FaFacebookF, FaYoutube } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
 import image from "../../assets/images/evangadi-logo-footer.png";
@@ -43,7 +43,7 @@ const Footer = () => {
             How it works
           </a>
           <a
-            href="https://www.evangadi.com/legal/terms"
+            href="#how-it-works"
             target="_blank"
             rel="noopener noreferrer"
             className="footer-link"

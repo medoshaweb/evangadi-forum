@@ -45,9 +45,7 @@
 }
 
 .question-item {
- 
   border: 1px solid #ddd;
- 
 }
 
 .question-item:hover {
@@ -91,11 +89,16 @@
   gap: 50px;
 }
 
-.question-title a {
-  text-decoration: none;
-  color: #000;
-  font-size: 1rem;
-  font-weight: 500;
+.question-date {
+  font-size: 14px;
+  color: #777;
+  font-style: italic;
+  margin-top: 4px;
+  transition: color 0.3s ease;
+}
+
+.question-date:hover {
+  color: #444;
 }
 
 .question-title a:hover {
@@ -108,8 +111,12 @@
   margin-top: 0.2rem;
   padding-left: 12px;
 }
-
-
+.question-date {
+  font-size: 14px;
+  color: #777;
+  margin-top: 4px;
+  font-style: italic;
+}
 
 .question-arrow {
   font-size: 24px;
@@ -120,7 +127,6 @@
   font-size: 1.5rem;
   color: #333;
   transition: 0.2s;
-  
 }
 
 .arrow-link:hover {
@@ -180,9 +186,6 @@
   color: gray;
   margin-top: 20px;
 }
-
-
-
 
 /* ✅ Responsive Styling */
 @media (max-width: 992px) {

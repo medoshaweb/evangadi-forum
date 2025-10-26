@@ -1,56 +1,80 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../../api";
-import { useAuth } from "../../context/AuthContext";  
+import { useAuth } from "../../context/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./login.css";
 import About from "../About/About";
 
-
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
-  const { user, login } = useAuth(); // ✅ get login from context
+  const { user, login } = useAuth();
 
   // ✅ Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate("/questions", { replace: true }); // replace prevents back navigation
+      navigate("/questions", { replace: true });
     }
   }, [user, navigate]);
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" }); // clear field error while typing
+  };
+
+  const handleTogglePassword = () => setShowPassword((prev) => !prev);
+
+  // ✅ Validation rules
+  const validateForm = () => {
+    const newErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(form.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!form.password) {
+      newErrors.password = "Password is required";
+    } else if (form.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+
+    return newErrors;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setErrors({});
+    setSuccess(null);
+
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
 
     try {
       const res = await API.post("/users/login", form);
       console.log("Frontend login response:", res.data);
 
-      // Destructure both tokens and user
       const { user, token, refreshToken } = res.data;
-
-      // ✅ Wrap everything under one consistent structure
       const userData = { user, token, refreshToken };
 
-      // Store user info with access and refresh tokens
       localStorage.setItem("user", JSON.stringify(userData));
-
-      // Optional: store user in context
       login(userData);
 
-      navigate("/questions"); // redirect to questions
+      setSuccess("Login successful! Redirecting...");
+      setTimeout(() => navigate("/questions"), 1000);
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setErrors({ general: err.response?.data?.message || err.message });
     }
   };
-
-  const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
   return (
     <>
@@ -59,14 +83,17 @@ export default function Login() {
           <div className="login_form_container">
             <h2>Login to your account</h2>
             <p>
-              Don't have an account?{" "}
+              Don’t have an account?{" "}
               <Link to="/signup" className="signup-link">
                 Create a new account
               </Link>
             </p>
             <br />
-            {error && <p className="error">{error}</p>}
-            <form onSubmit={handleSubmit}>
+            {errors.general && <p className="error">{errors.general}</p>}
+            {success && <p className="success">{success}</p>}
+
+            <form onSubmit={handleSubmit} noValidate>
+              {/* Email */}
               <div className="email_input">
                 <input
                   name="email"
@@ -77,7 +104,10 @@ export default function Login() {
                   className="form-input"
                   required
                 />
+                {errors.email && <span className="error">{errors.email}</span>}
               </div>
+
+              {/* Password */}
               <div className="password_input">
                 <input
                   name="password"
@@ -92,9 +122,16 @@ export default function Login() {
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
+              {errors.password && (
+                <span className="error">{errors.password}</span>
+              )}
+
+              {/* Forgot password */}
               <p className="forgot_password">
                 <Link to="/forgot-password">Forgot password?</Link>
               </p>
+
+              {/* Submit */}
               <button type="submit" className="submit_btn">
                 Login
               </button>

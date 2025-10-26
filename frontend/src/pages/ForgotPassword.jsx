@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 
-
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,42 +25,19 @@ export default function ForgotPassword() {
 
       const data = await res.json(); // parse JSON response
 
-    if (!res.ok) {
-      throw new Error(data.message || "Error sending reset email");
+      if (!res.ok) {
+        throw new Error(data.message || "Error sending reset email");
+      }
+
+      setMessage(
+        data.message || "If that email exists, a reset link has been sent."
+      );
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setSending(false);
     }
-
-    setMessage(
-      data.message || "If that email exists, a reset link has been sent."
-    );
-  } catch (err) {
-    setError(err.message || "Something went wrong");
-  } finally {
-    setSending(false);
-  }
-};
-
-  //     // Handle non-JSON or empty responses safely
-  //     const text = await res.text();
-  //     let data = {};
-  //     try {
-  //       data = text ? JSON.parse(text) : {};
-  //     } catch {
-  //       data = {};
-  //     }
-
-  //     if (!res.ok) {
-  //       throw new Error(data.message || "Error sending reset email");
-  //     }
-
-  //     setMessage(
-  //       data.message || "If that email exists, a reset link has been sent."
-  //     );
-  //   } catch (err) {
-  //     setError(err.message || "Something went wrong");
-  //   } finally {
-  //     setSending(false);
-  //   }
-  // };
+  };
 
   return (
     <div className="forgot-container" style={styles.container}>

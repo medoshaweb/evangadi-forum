@@ -7,4 +7,4 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/refresh-token", refreshToken); // ✅ new route
 
-export default router; // ✅ important for `import userRoutes from "./routes/userRoutes.js"`
+export default router;

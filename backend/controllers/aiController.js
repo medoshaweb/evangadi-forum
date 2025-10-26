@@ -8,13 +8,13 @@ export async function suggestQuestion(req, res) {
   try {
     const { title, body } = req.body;
     const titleSafe = (title || "").trim();
-const bodySafe = (body || "").trim();
+    const bodySafe = (body || "").trim();
 
-if (!titleSafe || !bodySafe) {
-  return res
-    .status(400)
-    .json({ ok: false, error: "Title and body cannot be empty" });
-}
+    if (!titleSafe || !bodySafe) {
+      return res
+        .status(400)
+        .json({ ok: false, error: "Title and body cannot be empty" });
+    }
 
     const suggestion = {
       title: title,
@@ -100,4 +100,3 @@ function cosineSimilarity(a, b) {
   const normB = Math.sqrt(b.reduce((sum, val) => sum + val * val, 0));
   return dot / (normA * normB);
 }
-

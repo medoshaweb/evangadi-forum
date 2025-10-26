@@ -1,14 +1,11 @@
-
-
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../../api";
 import SemanticSearch from "../../components/SemanticSearch";
 import { FaRegCircleUser } from "react-icons/fa6";
-import "./questions.css"
+import "./questions.css";
 import { useAuth } from "../../context/AuthContext";
-
-
+import { format } from "timeago.js";
 
 export default function Questions() {
   const { user } = useAuth();
@@ -21,7 +18,6 @@ export default function Questions() {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedQuestion, setSelectedQuestion] = useState(null);
-  
 
   const fetchQuestions = async (page = 1, search = "") => {
     try {
@@ -55,8 +51,6 @@ export default function Questions() {
 
   const { questions, page, totalPages } = questionsData;
 
-  
-
   return (
     <div className="questions-page container">
       {/* Header Section */}
@@ -82,7 +76,12 @@ export default function Questions() {
       </div>
 
       {/* Semantic Search */}
-      <SemanticSearch onSelectQuestion={(q) => setSelectedQuestion(q)} />
+      {/* <SemanticSearch onSelectQuestion={(q) => setSelectedQuestion(q)} /> */}
+      <SemanticSearch
+        questions={questions}
+        searchTerm={searchTerm}
+        onSelectQuestion={(q) => setSelectedQuestion(q)}
+      />
 
       {/* Selected Question (optional AI result) */}
       {selectedQuestion && (
@@ -103,6 +102,13 @@ export default function Questions() {
                   <div className="user-avatar">
                     <FaRegCircleUser style={{ fontSize: "60px" }} />
                     <p className="question-user">{q.username}</p>
+                    {/* 🕒 Show posted date */}
+                    <p
+                      className="question-date"
+                      title={new Date(q.created_at).toLocaleString()}
+                    >
+                      Posted {format(q.created_at)}
+                    </p>
                   </div>
 
                   <div className="question-content">

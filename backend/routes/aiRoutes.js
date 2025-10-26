@@ -1,4 +1,3 @@
-
 import express from "express";
 import { generateAnswer } from "../ai/ai.js";
 
@@ -17,6 +16,4 @@ router.post("/ask", async (req, res) => {
   }
 });
 
-
 export default router;
-

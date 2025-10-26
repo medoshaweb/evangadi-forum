@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../api";
 
-import "./askQuestion.css"
+import "./askQuestion.css";
 
 export default function AskQuestion() {
   const [title, setTitle] = useState("");
@@ -37,15 +37,13 @@ export default function AskQuestion() {
             <h2 className="questionTitle">How to Ask a Good Question</h2>
             <div className="questionList">
               <ul className="questionListUl">
-                
                 <li>Summarize your problem in a one-line title.</li>
-                  
+
                 <li>Describe your problem in more detail.</li>
                 <li>
-                
                   Explain what you have tried and what you expected to happen.
                 </li>
-                
+
                 <li>Review your question and post it to the site.</li>
               </ul>
             </div>

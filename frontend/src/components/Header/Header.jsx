@@ -16,11 +16,14 @@ export default function Header() {
 
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/">How it Works</Link>
+        <Link to="/how-it-works">How it Works</Link>
 
         {user ? (
           <>
-            <span className="welcome">Welcome: {user?.user?.firstName || user?.user?.username || "Guest"}</span>
+            <span className="welcome">
+              Welcome:{" "}
+              {user?.user?.firstName || user?.user?.username || "Guest"}
+            </span>
             <button className="btn small" onClick={logout}>
               Logout
             </button>

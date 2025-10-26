@@ -76,7 +76,9 @@ export const login = async (req, res) => {
     if (!process.env.JWT_SECRET)
       return res.status(500).json({ message: "Server misconfiguration." });
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
     const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: "30d",
     });
@@ -91,7 +93,8 @@ export const login = async (req, res) => {
 // ---------------- REFRESH TOKEN ----------------
 export const refreshToken = (req, res) => {
   const { refreshToken } = req.body;
-  if (!refreshToken) return res.status(401).json({ message: "No refresh token" });
+  if (!refreshToken)
+    return res.status(401).json({ message: "No refresh token" });
 
   try {
     const user = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);

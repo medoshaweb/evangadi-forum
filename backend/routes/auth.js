@@ -14,7 +14,10 @@ router.post("/forgot-password", async (req, res) => {
     const { email } = req.body;
 
     const user = await User.findOne({ where: { email } });
-    if (!user) return res.status(200).json({ message: "If that email exists, a reset link has been sent." });
+    if (!user)
+      return res
+        .status(200)
+        .json({ message: "If that email exists, a reset link has been sent." });
 
     // Generate token
     const token = crypto.randomBytes(32).toString("hex");
@@ -37,55 +40,6 @@ router.post("/forgot-password", async (req, res) => {
     res.status(500).json({ message: "Error sending email" });
   }
 });
-
-
-//     if (!email) return res.status(400).json({ message: "Email is required" });
-
-//     // Check if user exists
-//     const [rows] = await db.query(
-//       "SELECT id, email FROM users WHERE email = ?",
-//       [email]
-//     );
-
-//     if (!rows || rows.length === 0) {
-//       // Always send the same message for security
-//       return res
-//         .status(200)
-//         .json({ message: "If that email exists, a reset link has been sent." });
-//     }
-
-//     const user = rows[0];
-
-//     // Generate secure reset token
-//     const token = crypto.randomBytes(32).toString("hex");
-//     const hash = crypto.createHash("sha256").update(token).digest("hex");
-//     const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-
-//     // Save token to DB
-//     await db.query(
-//       "UPDATE users SET reset_token = ?, reset_token_expires = ? WHERE id = ?",
-//       [hash, expires, user.id]
-//     );
-
-//     // Create reset link
-//     const resetUrl = `${
-//       process.env.CLIENT_URL || "http://localhost:5173"
-//     }/reset-password/${token}`;
-//     const subject = "Password Reset Request";
-//     const text = `You requested a password reset. Click the link below to reset your password:\n\n${resetUrl}\n\nIf you didn't request this, ignore this email.`;
-
-//     // Send email
-//     await sendEmail(user.email, subject, text);
-
-//     // Always respond with JSON
-//     return res.status(200).json({
-//       message: "If that email exists, a reset link has been sent.",
-//     });
-//   } catch (err) {
-//     console.error("Forgot password error:", err);
-//     return res.status(500).json({ message: "Server error. Please try again." });
-//   }
-// });
 
 // ===========================
 // RESET PASSWORD

@@ -12,12 +12,22 @@ function AppRouter() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/ask" element={<PrivateRoute>
-                      <AskQuestion />
-                    </PrivateRoute>} />
-      <Route path="/questions/${id}" element={<PrivateRoute>
-                      <QuestionDetail />
-                    </PrivateRoute>} />
+      <Route
+        path="/ask"
+        element={
+          <PrivateRoute>
+            <AskQuestion />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/questions/${id}"
+        element={
+          <PrivateRoute>
+            <QuestionDetail />
+          </PrivateRoute>
+        }
+      />
       <Route path="/terms" element={<Terms />} />
       <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
       <Route path="/auth" element={<AuthLayout />} />

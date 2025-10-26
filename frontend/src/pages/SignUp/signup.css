@@ -3,43 +3,46 @@
   --background-color: #f9f9fc;
   --text-color: #333;
 }
+.error {
+  color: #ff3333;
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+.success {
+  color: #28a745;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
 
 /* Page layout */
 .page-wrapper {
   display: flex;
-  flex-direction: row;      /* side by side */
-  align-items: center;      /* vertical alignment */
-  justify-content: center;  /* center horizontally */
-   gap: 50px;                /* space between the two sections */
+  flex-direction: row; /* side by side */
+  align-items: center; /* vertical alignment */
+  justify-content: center; /* center horizontally */
+  gap: 50px; /* space between the two sections */
   padding: 20px;
 }
 
 .signup-container {
-  flex: 0 0 500px;  /* fixed width, won’t shrink */
-  max-width: 50%;   /* optional proportional width */
+  flex: 0 0 500px; /* fixed width, won’t shrink */
+  max-width: 50%; /* optional proportional width */
   background-color: #fff;
   padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
 .about-container {
-  flex: 1;          /* takes remaining space */
+  flex: 1; /* takes remaining space */
   max-width: 50%;
   background-color: #f9f9f9;
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
 }
-
-
-/* Left form */
-/* .form-side {
-  flex: 1;
-  padding: 50px 60px;
-} */
-
 
 .form-side h2 {
   font-size: 26px;
@@ -57,7 +60,7 @@
 form input {
   width: 95%;
   padding: 12px 14px;
-  
+
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 15px;

@@ -6,43 +6,40 @@
   margin: auto;
   width: 83% !important;
   padding-right: 0 !important;
- 
-
 }
-.navigation_links{
+.navigation_links {
   font-size: 18px !important;
   color: var(--blue-shade) !important;
   padding: 10px;
   font-weight: 500 !important;
   margin-left: 10px;
   text-decoration: none;
-
 }
-.welcome{
+.welcome {
   color: var(--blue-shade) !important;
   font-size: 12px !important;
   font-weight: 500 !important;
   margin-right: 10px;
 }
 
-.navigation_links:hover{
-  color:var(--primary-color) !important;
+.navigation_links:hover {
+  color: var(--primary-color) !important;
   text-decoration: none;
 }
 
-.login_btn{
-  padding:10px 20px !important;
+.login_btn {
+  padding: 10px 20px !important;
   color: white !important;
   background-color: var(--blue-shade) !important;
 }
 
-
-.login_btn:hover{
+.login_btn:hover {
   background-color: var(--blue-main) !important;
-  color:#fff !important;
+  color: #fff !important;
 }
 
-.logout_btn, .login_btn {
+.logout_btn,
+.login_btn {
   background-color: var(--blue-shade);
   color: #fff !important;
   border: none;
@@ -51,13 +48,13 @@
   margin-left: 15px;
 }
 
- .logout_btn:hover{
-  background-color: var(--primary-color) !important; 
-  color:#fff !important;
+.logout_btn:hover {
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
   border: none;
-} 
+}
 
-.px-5{
+.px-5 {
   padding-right: 0 !important;
 }
 
@@ -68,17 +65,16 @@
     text-align: center;
     background-color: transparent;
     /* color: var(--blue-main) !important; */
-    color:white;
+    color: white;
   }
-    .navigation_links{
-      /* color: blue; */
-      text-align: center;
-      padding: 10px 0 !important;
-    }
-    .navigation_links:hover{
-      /* color: var(--blue-main); */
-      text-decoration: none;
-      text-align: center;
-    }
-
+  .navigation_links {
+    /* color: blue; */
+    text-align: center;
+    padding: 10px 0 !important;
+  }
+  .navigation_links:hover {
+    /* color: var(--blue-main); */
+    text-decoration: none;
+    text-align: center;
+  }
 }

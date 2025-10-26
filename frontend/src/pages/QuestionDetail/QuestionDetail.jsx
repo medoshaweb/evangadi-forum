@@ -21,7 +21,7 @@ export default function QuestionDetail() {
     fetchQuestion();
   }, [id]);
 
-   const postAnswer = async (e) => {
+  const postAnswer = async (e) => {
     e.preventDefault();
     setError("");
     if (!answer.trim()) return setError("Answer cannot be empty");
@@ -65,34 +65,7 @@ export default function QuestionDetail() {
         )}
 
         <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            setError("");
-            if (!answer.trim()) return setError("Answer cannot be empty");
-
-            try {
-              const res = await API.post(`/answers/${id}`, {
-                answerText: answer,
-              });
-
-              // Ensure the new answer has a unique id for the key
-              const newAnswer = {
-                id: res.data.answerId || Date.now(), // fallback in case ID is missing
-                answer: answer,
-                username: res.data.username || "You", // fallback if username missing
-                created_at: new Date().toISOString(),
-              };
-
-              setPayload((prev) => ({
-                ...prev,
-                answers: [...(prev.answers || []), newAnswer],
-              }));
-
-              setAnswer("");
-            } catch (err) {
-              setError(err.response?.data?.message || err.message);
-            }
-          }}
+          onSubmit={postAnswer}
           className="answer-form"
         >
           <label>Your answer</label>

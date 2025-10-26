@@ -7,6 +7,19 @@ const genAI = new GoogleGenerativeAI({
   location: process.env.GOOGLE_CLOUD_LOCATION || "global",
 });
 
+// 📘 Helper to format MySQL timestamps
+function formatDateTime(mysqlDate) {
+  if (!mysqlDate) return null;
+  const date = new Date(mysqlDate);
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 // 📘 Get all questions
 export const getQuestions = async (req, res) => {
   try {
@@ -43,8 +56,14 @@ LIMIT ? OFFSET ?
       Number(offset),
     ]);
 
+    // Format created_at before sending to frontend
+    const formattedRows = rows.map((r) => ({
+      ...r,
+      created_at: formatDateTime(r.created_at),
+    }));
+
     res.json({
-      questions: rows,
+      questions: formattedRows,
       total,
       page: Number(page),
       totalPages: Math.ceil(total / limit),
@@ -54,18 +73,6 @@ LIMIT ? OFFSET ?
     res.status(500).json({ message: "Server error" });
   }
 };
-//     const [results] = await db.query(`
-//       SELECT q.id, q.title, q.description, q.created_at, u.username
-//       FROM questions q
-//       JOIN users u ON q.user_id = u.id
-//       ORDER BY q.created_at DESC
-//     `);
-//     res.json(results);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "DB error" });
-//   }
-// };
 
 // 📘 Get single question with its answers
 export const getQuestionWithAnswers = async (req, res) => {
@@ -83,6 +90,7 @@ export const getQuestionWithAnswers = async (req, res) => {
       return res.status(404).json({ message: "Question not found" });
 
     const question = qres[0];
+    question.created_at = formatDateTime(question.created_at);
 
     const [answers] = await db.query(
       `SELECT a.id, a.answer, a.created_at, u.username
@@ -93,7 +101,12 @@ export const getQuestionWithAnswers = async (req, res) => {
       [id]
     );
 
-    res.json({ question, answers });
+    const formattedAnswers = answers.map((a) => ({
+      ...a,
+      created_at: formatDateTime(a.created_at),
+    }));
+
+    res.json({ question, answers: formattedAnswers });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "DB error" });
@@ -120,22 +133,6 @@ export const createQuestion = async (req, res) => {
     );
     const questionId = result.insertId;
 
-    // 2️⃣ Generate embedding using Google Generative AI
-    // const embeddingResponse = await genAI.embed({
-    //   text: `${title}\n\n${description}`,
-    // });
-
-    // if (embeddingResponse && Array.isArray(embeddingResponse.embedding)) {
-    //   const embedding = embeddingResponse.embedding;
-    //   // 3️⃣ Store embedding in MySQL as JSON
-    //   await db.query(
-    //     "INSERT INTO question_embeddings (question_id, embedding) VALUES (?, ?)",
-    //     [questionId, JSON.stringify(embedding)]
-    //   );
-    // } else {
-    //   console.warn("⚠️ Embedding not ready, skipping insert for now");
-    // }
-
     // 4️⃣ Return the inserted question
     const [rows] = await db.query(
       `SELECT q.id, q.title, q.description, q.created_at, u.username
@@ -145,7 +142,10 @@ export const createQuestion = async (req, res) => {
       [questionId]
     );
 
-    res.json(rows[0]);
+    const newQuestion = rows[0];
+    newQuestion.created_at = formatDateTime(newQuestion.created_at);
+
+    res.json(newQuestion);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });

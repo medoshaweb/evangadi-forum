@@ -6,7 +6,7 @@
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-  background:url("../../assets//images//blueRedBG.jpg");
+  background: url("../../assets//images//blueRedBG.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -28,7 +28,7 @@
 /* Form container with fade-in and fade-out effects */
 .formContainer {
   width: 100%;
-  transition: opacity .5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .fadeIn {
@@ -54,14 +54,11 @@
     gap: 30px;
     max-width: 80% !important;
   }
-
-
 }
-@media (max-width: 768px) { 
-  .about{
+@media (max-width: 768px) {
+  .about {
     display: none;
   }
-  
 }
 
 @media (max-width: 576px) {

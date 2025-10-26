@@ -12,6 +12,7 @@ import Footer from "./components/Footer/Footer";
 import logo from "./assets/images/evangadi-logo-header.png";
 import bgImage from "./assets/images/evangadi-background.jpg";
 import { useAuth } from "./context/AuthContext";
+import HowItWorks from "./pages/HowItWorks/HowItWorks";
 import "./App.css";
 
 // ✅ Private route for authenticated users
@@ -21,11 +22,10 @@ function PrivateRoute({ children }) {
   return user ? children : <Navigate to="/login" />;
 }
 
-
 export default function App() {
-  const { user,loading, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   // const { loading } = useAuth();
-if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div
@@ -45,7 +45,7 @@ if (loading) return <div>Loading...</div>;
         </div>
         <nav>
           <Link to="/">Home</Link>
-          {user && <Link to="/">How it Works</Link>}
+          {user && <Link to="/how-it-works">How it Works</Link>}
           {user ? (
             <>
               <span className="welcome">{`Welcome: ${
@@ -81,6 +81,7 @@ if (loading) return <div>Loading...</div>;
               </PrivateRoute>
             }
           />
+          <Route path="/how-it-works" element={<HowItWorks />} />
           <Route
             path="/questions"
             element={

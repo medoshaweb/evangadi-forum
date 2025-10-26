@@ -31,7 +31,6 @@ router.post("/search", async (req, res) => {
   }
 });
 
-
 router.get("/", getQuestions); // Supports ?page=&limit=&search=
 // router.get("/", verifyToken, getQuestions);
 router.get("/search", verifyToken, searchQuestions);

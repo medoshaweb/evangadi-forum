@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./signup.css";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import API from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -15,33 +14,77 @@ export default function Signup({ onSwitch }) {
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-  const { login } = useAuth();
+
+  const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" }); // Clear field error as user types
+  };
+
+  // ✅ Client-side validation rules
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!form.firstName.trim()) newErrors.firstName = "First name is required";
+    if (!form.lastName.trim()) newErrors.lastName = "Last name is required";
+
+    if (!form.username.trim()) {
+      newErrors.username = "Username is required";
+    } else if (form.username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(form.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!form.password) {
+      newErrors.password = "Password is required";
+    } else if (form.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    } else if (!/[A-Z]/.test(form.password)) {
+      newErrors.password =
+        "Password must contain at least one uppercase letter";
+    } else if (!/[0-9]/.test(form.password)) {
+      newErrors.password = "Password must contain at least one number";
+    }
+
+    return newErrors;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    if (form.password.length < 8)
-      return setError("Password must be at least 8 characters");
+    setSuccess(null);
+
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     try {
       await API.post("/users/signup", form);
       setSuccess("Signup successful! Logging you in...");
+
       const res = await API.post("/users/login", {
         email: form.email,
         password: form.password,
       });
+
       login(res.data);
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setErrors({ general: err.response?.data?.message || err.message });
     }
   };
 
@@ -52,7 +95,8 @@ export default function Signup({ onSwitch }) {
           <h5>Join the network</h5>
           <p className="signin-text">
             Already have an account?{" "}
-            <Link to="/login"
+            <Link
+              to="/login"
               onClick={onSwitch}
               style={{
                 cursor: "pointer",
@@ -63,10 +107,12 @@ export default function Signup({ onSwitch }) {
               Sign in
             </Link>
           </p>
-          {error && <p className="error">{error}</p>}
+
+          {errors.general && <p className="error">{errors.general}</p>}
           {success && <p className="success">{success}</p>}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
+            {/* Email */}
             <input
               name="email"
               type="email"
@@ -75,24 +121,38 @@ export default function Signup({ onSwitch }) {
               onChange={handleChange}
               required
             />
+            {errors.email && <span className="error">{errors.email}</span>}
 
+            {/* First and Last Name */}
             <div className="nameinputs">
-              <input
-                name="firstName"
-                placeholder="First Name"
-                value={form.firstName}
-                onChange={handleChange}
-                required
-              />
-              <input
-                name="lastName"
-                placeholder="Last Name"
-                value={form.lastName}
-                onChange={handleChange}
-                required
-              />
+              <div>
+                <input
+                  name="firstName"
+                  placeholder="First Name"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.firstName && (
+                  <span className="error">{errors.firstName}</span>
+                )}
+              </div>
+
+              <div>
+                <input
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  required
+                />
+                {errors.lastName && (
+                  <span className="error">{errors.lastName}</span>
+                )}
+              </div>
             </div>
 
+            {/* Username */}
             <input
               name="username"
               placeholder="User Name"
@@ -100,7 +160,11 @@ export default function Signup({ onSwitch }) {
               onChange={handleChange}
               required
             />
+            {errors.username && (
+              <span className="error">{errors.username}</span>
+            )}
 
+            {/* Password */}
             <div className="passwordinput">
               <input
                 name="password"
@@ -118,7 +182,11 @@ export default function Signup({ onSwitch }) {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
+            {errors.password && (
+              <span className="error">{errors.password}</span>
+            )}
 
+            {/* Submit */}
             <button type="submit" className="submitbtn">
               Agree and Join
             </button>
@@ -148,6 +216,7 @@ export default function Signup({ onSwitch }) {
               </Link>
               .
             </p>
+
             <p className="signintext">
               <a
                 onClick={onSwitch}
@@ -162,6 +231,7 @@ export default function Signup({ onSwitch }) {
             </p>
           </form>
         </div>
+
         <div className="about-container">
           <About />
         </div>
