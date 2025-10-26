@@ -44,7 +44,7 @@ router.post("/forgot-password", async (req, res) => {
 
     // ✅ Create reset link
     const resetUrl = `${
-      process.env.FRONTEND_URL || "http://localhost:3000"
+      process.env.FRONTEND_URL || "http://localhost:5173"
     }/reset-password/${token}`;
     const subject = "Password Reset Request";
     const text = `
