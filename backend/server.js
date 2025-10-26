@@ -10,6 +10,7 @@ import questionRoutes from "./routes/questionRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
