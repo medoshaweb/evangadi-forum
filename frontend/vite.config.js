@@ -3,6 +3,6 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: '/forum/evangadi-forum/',
+  // base: '/forum/evangadi-forum/',
 });
 

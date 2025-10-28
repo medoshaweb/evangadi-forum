@@ -106,44 +106,6 @@ WHERE q.title LIKE ? OR q.description LIKE ? OR u.username LIKE ?
   }
 };
 
-// // 📘 Get single question with its answers
-// export const getQuestionWithAnswers = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const [qres] = await db.query(
-//       `SELECT q.id, q.title, q.description, q.created_at, u.username
-//        FROM questions q
-//        JOIN users u ON q.user_id = u.id
-//        WHERE q.id = ?`,
-//       [id]
-//     );
-
-//     if (!qres.length)
-//       return res.status(404).json({ message: "Question not found" });
-
-//     const question = qres[0];
-//     question.created_at = formatDateTime(question.created_at);
-
-//     const [answers] = await db.query(
-//       `SELECT a.id, a.answer, a.created_at, u.username
-//        FROM answers a
-//        JOIN users u ON a.user_id = u.id
-//        WHERE a.question_id = ?
-//        ORDER BY a.created_at ASC`,
-//       [id]
-//     );
-
-//     const formattedAnswers = answers.map((a) => ({
-//       ...a,
-//       created_at: formatDateTime(a.created_at),
-//     }));
-
-//     res.json({ question, answers: formattedAnswers });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "DB error" });
-//   }
-// };
 
 // 📘 Get single question with its answers (with totalVotes)
 export const getQuestionWithAnswers = async (req, res) => {
